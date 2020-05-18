@@ -54,7 +54,7 @@
             <router-view></router-view>
         </main>
     </div>
-</template>nav-link
+</template>
 
 <script>
     export default {

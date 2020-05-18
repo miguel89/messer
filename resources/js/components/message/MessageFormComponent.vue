@@ -11,7 +11,7 @@
             </p>
         </div>
         <div class="col-md-8">
-            <form autocomplete="off" @submit.prevent="save" v-if="!success" method="post">
+            <form autocomplete="off" @submit.prevent="submit" method="post">
 
                 <div class="form-group row" v-bind:class="{ 'has-error': has_error && errors.subject }">
                     <label for="subject">Subject</label>
@@ -88,8 +88,15 @@
         components: {
             Datepicker
         },
-        props:['action'],
+        props:['action', 'dataId'],
         methods: {
+            submit() {
+                if (this.dataId) {
+                    this.update();
+                } else {
+                    this.save();
+                }
+            },
             save() {
                 this.loading = true;
                 this.$http.post('/messages', {
@@ -100,13 +107,48 @@
                 }).then(resp => {
                     this.loading = false;
                     this.success = true;
+                    console.log(resp.data);
+                    this.$router.push({name: 'editAnnouncement', params: {id: resp.data.id}});
                 }).catch(resp => {
                     this.success = false;
-                    console.log(resp);
-                    console.log(resp.errors);
                     this.errors = resp.response.data.errors;
                     this.error = resp.message;
                     this.has_error = true;
+                    this.loading = false;
+                });
+            },
+            update() {
+                this.loading = true;
+                this.$http.put(`/messages/${this.dataId}`, {
+                    subject: this.subject,
+                    content: this.content,
+                    start_date: this.start_date,
+                    expiration_date: this.expiration_date,
+                }).then(resp => {
+                    this.loading = false;
+                    this.success = true;
+                    this.$router.push({name: 'editAnnouncement', params: {dataId: resp.data.id}});
+                }).catch(resp => {
+                    this.success = false;
+                    this.errors = resp.response.data.errors;
+                    this.error = resp.message;
+                    this.has_error = true;
+                    this.loading = false;
+                });
+            }
+        },
+        mounted() {
+            if (this.dataId) {
+                this.$http.get(`/messages/${this.dataId}`).then(resp => {
+                    this.loading = false;
+                    this.success = true;
+                    console.log(resp);
+                    this.subject = resp.data.subject;
+                    this.content = resp.data.content;
+                    this.start_date = resp.data.start_date;
+                    this.expiration_date = resp.data.expiration_date;
+                }).catch(resp => {
+                    console.error(resp);
                     this.loading = false;
                 });
             }

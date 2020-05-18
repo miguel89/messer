@@ -19,6 +19,7 @@ class CreateMessagesTable extends Migration
             $table->text('content');
             $table->date('start_date');
             $table->date('expiration_date');
+            $table->date('deleted_at')->nullable();
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });

@@ -3604,6 +3604,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _MessageFormComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MessageFormComponent */ "./resources/js/components/message/MessageFormComponent.vue");
 //
 //
 //
@@ -3620,8 +3621,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "EditMessage"
+  name: "EditMessage",
+  components: {
+    MessageFormComponent: _MessageFormComponent__WEBPACK_IMPORTED_MODULE_0__["default"]
+  }
 });
 
 /***/ }),
@@ -3756,8 +3761,15 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     Datepicker: vuejs_datepicker__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: ['action'],
+  props: ['action', 'dataId'],
   methods: {
+    submit: function submit() {
+      if (this.dataId) {
+        this.update();
+      } else {
+        this.save();
+      }
+    },
     save: function save() {
       var _this = this;
 
@@ -3770,14 +3782,65 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (resp) {
         _this.loading = false;
         _this.success = true;
+        console.log(resp.data);
+
+        _this.$router.push({
+          name: 'editAnnouncement',
+          params: {
+            id: resp.data.id
+          }
+        });
       })["catch"](function (resp) {
         _this.success = false;
-        console.log(resp);
-        console.log(resp.errors);
         _this.errors = resp.response.data.errors;
         _this.error = resp.message;
         _this.has_error = true;
         _this.loading = false;
+      });
+    },
+    update: function update() {
+      var _this2 = this;
+
+      this.loading = true;
+      this.$http.put("/messages/".concat(this.dataId), {
+        subject: this.subject,
+        content: this.content,
+        start_date: this.start_date,
+        expiration_date: this.expiration_date
+      }).then(function (resp) {
+        _this2.loading = false;
+        _this2.success = true;
+
+        _this2.$router.push({
+          name: 'editAnnouncement',
+          params: {
+            dataId: resp.data.id
+          }
+        });
+      })["catch"](function (resp) {
+        _this2.success = false;
+        _this2.errors = resp.response.data.errors;
+        _this2.error = resp.message;
+        _this2.has_error = true;
+        _this2.loading = false;
+      });
+    }
+  },
+  mounted: function mounted() {
+    var _this3 = this;
+
+    if (this.dataId) {
+      this.$http.get("/messages/".concat(this.dataId)).then(function (resp) {
+        _this3.loading = false;
+        _this3.success = true;
+        console.log(resp);
+        _this3.subject = resp.data.subject;
+        _this3.content = resp.data.content;
+        _this3.start_date = resp.data.start_date;
+        _this3.expiration_date = resp.data.expiration_date;
+      })["catch"](function (resp) {
+        console.error(resp);
+        _this3.loading = false;
       });
     }
   }
@@ -5671,30 +5734,30 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("Edit Announcement")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v("\n                    TODO\n                ")
-            ])
-          ])
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-md-8" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _vm._v("Edit Announcement")
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c("message-form-component", {
+                attrs: { action: "Edit", "data-id": _vm.$route.params.id }
+              })
+            ],
+            1
+          )
         ])
       ])
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -5777,215 +5840,201 @@ var render = function() {
     _vm._m(0),
     _vm._v(" "),
     _c("div", { staticClass: "col-md-8" }, [
-      !_vm.success
-        ? _c(
-            "form",
+      _c(
+        "form",
+        {
+          attrs: { autocomplete: "off", method: "post" },
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.submit($event)
+            }
+          }
+        },
+        [
+          _c(
+            "div",
             {
-              attrs: { autocomplete: "off", method: "post" },
-              on: {
-                submit: function($event) {
-                  $event.preventDefault()
-                  return _vm.save($event)
-                }
-              }
+              staticClass: "form-group row",
+              class: { "has-error": _vm.has_error && _vm.errors.subject }
             },
             [
-              _c(
-                "div",
-                {
-                  staticClass: "form-group row",
-                  class: { "has-error": _vm.has_error && _vm.errors.subject }
-                },
-                [
-                  _c("label", { attrs: { for: "subject" } }, [
-                    _vm._v("Subject")
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.subject,
-                        expression: "subject"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      id: "subject",
-                      type: "text",
-                      name: "subject",
-                      required: "",
-                      autocomplete: "subject",
-                      autofocus: ""
-                    },
-                    domProps: { value: _vm.subject },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.subject = $event.target.value
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _vm.has_error && _vm.errors.subject
-                    ? _c("span", { staticClass: "help-block" }, [
-                        _vm._v(_vm._s(_vm.errors.subject[0]))
-                      ])
-                    : _vm._e()
-                ]
-              ),
+              _c("label", { attrs: { for: "subject" } }, [_vm._v("Subject")]),
               _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "form-group row",
-                  class: { "has-error": _vm.has_error && _vm.errors.content }
-                },
-                [
-                  _c("label", { attrs: { for: "content" } }, [
-                    _vm._v("Content")
-                  ]),
-                  _vm._v(" "),
-                  _c("textarea", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.content,
-                        expression: "content"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      id: "content",
-                      name: "content",
-                      required: "",
-                      autocomplete: "content"
-                    },
-                    domProps: { value: _vm.content },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.content = $event.target.value
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _vm.has_error && _vm.errors.content
-                    ? _c("span", { staticClass: "help-block" }, [
-                        _vm._v(_vm._s(_vm.errors.content[0]))
-                      ])
-                    : _vm._e()
-                ]
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "row" }, [
-                _c(
-                  "div",
+              _c("input", {
+                directives: [
                   {
-                    staticClass: "form-group col-md-6",
-                    class: {
-                      "has-error": _vm.has_error && _vm.errors.start_date
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.subject,
+                    expression: "subject"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  id: "subject",
+                  type: "text",
+                  name: "subject",
+                  required: "",
+                  autocomplete: "subject",
+                  autofocus: ""
+                },
+                domProps: { value: _vm.subject },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
                     }
-                  },
-                  [
-                    _c("label", { attrs: { for: "start_date" } }, [
-                      _vm._v("Start date")
-                    ]),
-                    _vm._v(" "),
-                    _c("datepicker", {
-                      attrs: { id: "start_date", name: "start_date" },
-                      model: {
-                        value: _vm.start_date,
-                        callback: function($$v) {
-                          _vm.start_date = $$v
-                        },
-                        expression: "start_date"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _vm.has_error && _vm.errors.start_date
-                      ? _c("span", { staticClass: "help-block" }, [
-                          _vm._v(_vm._s(_vm.errors.start_date[0]))
-                        ])
-                      : _vm._e()
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "form-group col-md-6",
-                    class: {
-                      "has-error": _vm.has_error && _vm.errors.expiration_date
-                    }
-                  },
-                  [
-                    _c("label", { attrs: { for: "expiration_date" } }, [
-                      _vm._v("Expiration date")
-                    ]),
-                    _vm._v(" "),
-                    _c("datepicker", {
-                      attrs: { id: "expiration_date", name: "expiration_date" },
-                      model: {
-                        value: _vm.expiration_date,
-                        callback: function($$v) {
-                          _vm.expiration_date = $$v
-                        },
-                        expression: "expiration_date"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _vm.has_error && _vm.errors.expiration_date
-                      ? _c("span", { staticClass: "help-block" }, [
-                          _vm._v(_vm._s(_vm.errors.expiration_date[0]))
-                        ])
-                      : _vm._e()
-                  ],
-                  1
-                )
-              ]),
+                    _vm.subject = $event.target.value
+                  }
+                }
+              }),
               _vm._v(" "),
-              _c("div", { staticClass: "form-group row mb-0" }, [
-                _c("div", { staticClass: "ml-auto" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: { type: "submit" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                        " +
-                          _vm._s(_vm.action) +
-                          "\n                    "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-danger",
-                      attrs: { type: "button" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                        Cancel\n                    "
-                      )
-                    ]
-                  )
-                ])
-              ])
+              _vm.has_error && _vm.errors.subject
+                ? _c("span", { staticClass: "help-block" }, [
+                    _vm._v(_vm._s(_vm.errors.subject[0]))
+                  ])
+                : _vm._e()
             ]
-          )
-        : _vm._e()
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "form-group row",
+              class: { "has-error": _vm.has_error && _vm.errors.content }
+            },
+            [
+              _c("label", { attrs: { for: "content" } }, [_vm._v("Content")]),
+              _vm._v(" "),
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.content,
+                    expression: "content"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  id: "content",
+                  name: "content",
+                  required: "",
+                  autocomplete: "content"
+                },
+                domProps: { value: _vm.content },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.content = $event.target.value
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _vm.has_error && _vm.errors.content
+                ? _c("span", { staticClass: "help-block" }, [
+                    _vm._v(_vm._s(_vm.errors.content[0]))
+                  ])
+                : _vm._e()
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c(
+              "div",
+              {
+                staticClass: "form-group col-md-6",
+                class: { "has-error": _vm.has_error && _vm.errors.start_date }
+              },
+              [
+                _c("label", { attrs: { for: "start_date" } }, [
+                  _vm._v("Start date")
+                ]),
+                _vm._v(" "),
+                _c("datepicker", {
+                  attrs: { id: "start_date", name: "start_date" },
+                  model: {
+                    value: _vm.start_date,
+                    callback: function($$v) {
+                      _vm.start_date = $$v
+                    },
+                    expression: "start_date"
+                  }
+                }),
+                _vm._v(" "),
+                _vm.has_error && _vm.errors.start_date
+                  ? _c("span", { staticClass: "help-block" }, [
+                      _vm._v(_vm._s(_vm.errors.start_date[0]))
+                    ])
+                  : _vm._e()
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "form-group col-md-6",
+                class: {
+                  "has-error": _vm.has_error && _vm.errors.expiration_date
+                }
+              },
+              [
+                _c("label", { attrs: { for: "expiration_date" } }, [
+                  _vm._v("Expiration date")
+                ]),
+                _vm._v(" "),
+                _c("datepicker", {
+                  attrs: { id: "expiration_date", name: "expiration_date" },
+                  model: {
+                    value: _vm.expiration_date,
+                    callback: function($$v) {
+                      _vm.expiration_date = $$v
+                    },
+                    expression: "expiration_date"
+                  }
+                }),
+                _vm._v(" "),
+                _vm.has_error && _vm.errors.expiration_date
+                  ? _c("span", { staticClass: "help-block" }, [
+                      _vm._v(_vm._s(_vm.errors.expiration_date[0]))
+                    ])
+                  : _vm._e()
+              ],
+              1
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group row mb-0" }, [
+            _c("div", { staticClass: "ml-auto" }, [
+              _c(
+                "button",
+                { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+                [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(_vm.action) +
+                      "\n                    "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                { staticClass: "btn btn-danger", attrs: { type: "button" } },
+                [
+                  _vm._v(
+                    "\n                        Cancel\n                    "
+                  )
+                ]
+              )
+            ])
+          ])
+        ]
+      )
     ])
   ])
 }

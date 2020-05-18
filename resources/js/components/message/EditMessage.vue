@@ -6,7 +6,7 @@
                     <div class="card-header">Edit Announcement</div>
 
                     <div class="card-body">
-                        TODO
+                        <message-form-component action="Edit" v-bind:data-id="$route.params.id"></message-form-component>
                     </div>
                 </div>
             </div>
@@ -15,8 +15,10 @@
 </template>
 
 <script>
+    import MessageFormComponent from "./MessageFormComponent";
     export default {
-        name: "EditMessage"
+        name: "EditMessage",
+        components: {MessageFormComponent}
     }
 </script>
 

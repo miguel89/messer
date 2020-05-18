@@ -45,7 +45,7 @@ class MessageController extends Controller
 
         $message->save();
 
-        return response()->json(['status' => 'success'], 200);
+        return response()->json(['status' => 'success', 'id' => $message->id], 200);
     }
 
     /**
@@ -65,16 +65,15 @@ class MessageController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param Message $_message
+     * @param Message $messageId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Message $_message)
+    public function update(Request $request, $messageId)
     {
-        $this->validatePermission($_message);
+        $message = $this->validateAndCreateObject($request, $messageId);
+        $this->validatePermission($message);
 
-        $message = $this->validateAndCreateObject($request, $_message);
-
-        $message->update();
+        $message->save();
 
         return response()->json(['status' => 'success'], 200);
     }
@@ -103,13 +102,13 @@ class MessageController extends Controller
      */
     private function validatePermission(Message $message)
     {
-        if (!$message->user() . equalTo(Auth::user())) {
+        if (!$message->user() == Auth::user()) {
             throw new AccessDeniedException();
         }
         return true;
     }
 
-    private function validateAndCreateObject(Request $request, Message $_message = null) {
+    private function validateAndCreateObject(Request $request, $messageId = null) {
         $validatedData = $request->validate([
             'subject' => ['required', 'max:255'],
             'content' => ['required'],
@@ -117,7 +116,7 @@ class MessageController extends Controller
             'expiration_date' => ['required'],
         ]);
 
-        $message = $_message == null ? new Message() : $_message;
+        $message = $messageId == null ? new Message() : Message::find($messageId);
 
         $message->subject = $request->get('subject');
         $message->content = $request->get('content');

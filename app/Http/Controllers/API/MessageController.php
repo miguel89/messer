@@ -119,7 +119,7 @@ class MessageController extends Controller
 
         $message = $_message == null ? new Message() : $_message;
 
-        $message->subject = $request->subject;
+        $message->subject = $request->get('subject');
         $message->content = $request->get('content');
         $message->start_date = $request->start_date;
         $message->expiration_date = $request->expiration_date;

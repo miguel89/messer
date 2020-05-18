@@ -68,7 +68,7 @@
                     },
                     success: function() {
                         const redirectTo = redirect ? redirect.from.name : 'dashboard';
-                        app.$router.push({name: 'dashboard'});
+                        app.$router.push({name: redirectTo});
                     },
                     error: function() {
                         app.has_error = true;

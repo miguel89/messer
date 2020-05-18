@@ -14,10 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-
 Route::group([
 
     'middleware' => 'api',
@@ -32,3 +28,7 @@ Route::group([
     Route::get('me', 'AuthController@me');
 
 });
+
+Route::resource('messages', 'API\MessageController')->except([
+    'create', 'edit'
+]);

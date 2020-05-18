@@ -15,7 +15,12 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        <li class="nav-item" v-if="$auth.check()" >
+                            <router-link :to="{ name: 'listAnnouncements' }" class="nav-link">Announcements</router-link>
+                        </li>
+                        <li class="nav-item" v-if="$auth.check()" >
+                            <router-link :to="{ name: 'createAnnouncement' }" class="nav-link">Create Announcement</router-link>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -30,17 +35,15 @@
                             <router-link :to="{ name: 'register' }" class="nav-link">Register</router-link>
                         </li>
 
-                        <li class="nav-item dropdown" v-if="$auth.check()">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <li class="nav-item" v-if="$auth.check()">
+                            <a class="nav-link" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                 {{ $auth.user().name }}  <span class="caret"></span>
                             </a>
-
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#" @click.prevent="$auth.logout()">
-                                   Logout
-                                </a>
-                            </div>
+                        </li>
+                        <li class="nav-item" v-if="$auth.check()">
+                            <a class="nav-link" href="#" @click.prevent="$auth.logout()">
+                                Logout
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -51,7 +54,7 @@
             <router-view></router-view>
         </main>
     </div>
-</template>
+</template>nav-link
 
 <script>
     export default {

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Example from './components/ExampleComponent'
+import Example from './components/HomeComponent'
 import RegisterComponent from "./components/RegisterComponent";
 import LoginComponent from "./components/LoginComponent";
 import VueAuth from '@websanova/vue-auth'
@@ -8,7 +8,10 @@ import VueRouter from 'vue-router'
 import auth from "./auth";
 import axios from 'axios'
 import AppComponent from "./components/AppComponent";
-import 'es6-promise/auto'
+// import 'es6-promise/auto'
+import ListMessages from "./components/message/ListMessages";
+import CreateMessageComponent from "./components/message/CreateMessageComponent";
+import EditMessage from "./components/message/EditMessage";
 
 window.Vue = Vue;
 
@@ -38,6 +41,30 @@ const router = new VueRouter({
             component: LoginComponent,
             meta: {
                 auth: false
+            }
+        },
+        {
+            path: '/announcements',
+            name: 'listAnnouncements',
+            component: ListMessages,
+            meta: {
+                auth: true
+            }
+        },
+        {
+            path: '/announcements/create',
+            name: 'createAnnouncement',
+            component: CreateMessageComponent,
+            meta: {
+                auth: true
+            }
+        },
+        {
+            path: '/announcements/:id',
+            name: 'editAnnouncement',
+            component: EditMessage,
+            meta: {
+                auth: true
             }
         },
     ],

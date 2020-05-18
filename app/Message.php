@@ -17,6 +17,7 @@ class Message extends Model
         'content',
         'start_date',
         'expiration_date',
+        'user_id'
     ];
 
     /**
@@ -31,10 +32,10 @@ class Message extends Model
     /**
      * @var mixed
      */
-    public $subject;
-    public $content;
-    public $start_date;
-    public $expiration_date;
+    private $subject;
+    private $content;
+    private $start_date;
+    private $expiration_date;
 
     /**
      * Get the user that owns the message.

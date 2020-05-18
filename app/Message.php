@@ -11,6 +11,14 @@ class Message extends Model
     // Instead, it will create a deleted_at column indicating when it was deleted
     use SoftDeletes;
 
+    // mass fillable attributes
+    protected $fillable = [
+        'subject',
+        'content',
+        'start_date',
+        'expiration_date',
+    ];
+
     /**
      * The attributes that should be mutated to dates.
      *
@@ -19,6 +27,14 @@ class Message extends Model
     protected $dates = [
         'start_date', 'expiration_date'
     ];
+
+    /**
+     * @var mixed
+     */
+    public $subject;
+    public $content;
+    public $start_date;
+    public $expiration_date;
 
     /**
      * Get the user that owns the message.

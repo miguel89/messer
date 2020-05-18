@@ -101,6 +101,7 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
+        // adding authorisation headers
         header('Access-Control-Expose-Headers: Authorization');
         header('Authorization: Bearer '.$token.'');
         return response()->json([

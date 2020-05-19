@@ -1,23 +1,18 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Home</div>
-
-                    <div class="card-body">
-                        TODO
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <welcome-component v-if="!$auth.check()"></welcome-component>
+    <dashboard-component v-else></dashboard-component>
 </template>
 
 <script>
+    import WelcomeComponent from "./WelcomeComponent";
+    import DashboardComponent from "./DashboardComponent";
     export default {
+        components: {DashboardComponent, WelcomeComponent},
         mounted() {
 
         }
     }
 </script>
+<style scoped>
+
+</style>

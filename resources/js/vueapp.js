@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Example from './components/HomeComponent'
+import Home from './components/HomeComponent'
 import RegisterComponent from "./components/RegisterComponent";
 import LoginComponent from "./components/LoginComponent";
 import VueAuth from '@websanova/vue-auth'
@@ -8,10 +8,11 @@ import VueRouter from 'vue-router'
 import auth from "./auth";
 import axios from 'axios'
 import AppComponent from "./components/AppComponent";
-// import 'es6-promise/auto'
+import moment from 'moment'
 import ListMessages from "./components/message/ListMessages";
 import CreateMessageComponent from "./components/message/CreateMessageComponent";
 import EditMessage from "./components/message/EditMessage";
+import ViewMessageComponent from "./components/message/ViewMessageComponent";
 
 window.Vue = Vue;
 
@@ -19,14 +20,6 @@ const router = new VueRouter({
     history: true,
     mode: 'history',
     routes: [
-        {
-            path: '/dashboard',
-            name: 'dashboard',
-            component: Example,
-            meta: {
-                auth: false
-            }
-        },
         {
             path: '/register',
             name: 'register',
@@ -61,10 +54,26 @@ const router = new VueRouter({
         },
         {
             path: '/announcements/:id',
+            name: 'viewAnnouncement',
+            component: ViewMessageComponent,
+            meta: {
+                auth: true
+            }
+        },
+        {
+            path: '/announcements/:id/edit',
             name: 'editAnnouncement',
             component: EditMessage,
             meta: {
                 auth: true
+            }
+        },
+        {
+            path: '/',
+            name: 'home',
+            component: Home,
+            meta: {
+                auth: undefined
             }
         },
     ],
@@ -78,6 +87,12 @@ axios.defaults.baseURL = `${process.env.MIX_APP_URL}/api`;
 Vue.use(VueAuth, auth);
 
 Vue.component('app', AppComponent);
+
+Vue.filter('formatDate', function(value) {
+    if (value) {
+        return moment(String(value)).format('MM/DD/YYYY')
+    }
+});
 
 const app = new Vue({
     el: '#app',

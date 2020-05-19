@@ -7,7 +7,7 @@
         <div class="col-md-4">
             <h3>Instructions</h3>
             <p>
-                Lorem ipsum TODO
+                Fill out the form with the subject, content, start and expiration dates.
             </p>
         </div>
         <div class="col-md-8">
@@ -16,7 +16,7 @@
                 <div class="form-group row" v-bind:class="{ 'has-error': has_error && errors.subject }">
                     <label for="subject">Subject</label>
 
-                    <input id="subject" type="text" class="form-control" name="subject"
+                    <input id="subject" type="text" class="form-control" name="subject" v-bind:disabled="view"
                            v-model="subject" required autocomplete="subject" autofocus>
 
                     <span class="help-block" v-if="has_error && errors.subject">{{ errors.subject[0] }}</span>
@@ -27,7 +27,7 @@
                     <label for="content">Content</label>
 
 
-                    <textarea id="content" class="form-control" name="content"
+                    <textarea id="content" class="form-control" name="content" v-bind:disabled="view"
                               v-model="content" required autocomplete="content"></textarea>
 
                     <span class="help-block" v-if="has_error && errors.content">{{ errors.content[0] }}</span>
@@ -37,7 +37,8 @@
                 <div class="form-group col-md-6" v-bind:class="{ 'has-error': has_error && errors.start_date }">
                     <label for="start_date">Start date</label>
 
-                    <datepicker id="start_date" name="start_date" v-model="start_date"></datepicker>
+                    <datepicker id="start_date" name="start_date"  v-bind:disabled="view"
+                                v-model="start_date"></datepicker>
 
                     <span class="help-block" v-if="has_error && errors.start_date">{{ errors.start_date[0] }}</span>
                 </div>
@@ -45,7 +46,8 @@
                 <div class="form-group col-md-6" v-bind:class="{ 'has-error': has_error && errors.expiration_date }">
                     <label for="expiration_date">Expiration date</label>
 
-                    <datepicker id="expiration_date" name="expiration_date" v-model="expiration_date"></datepicker>
+                    <datepicker id="expiration_date" name="expiration_date" v-bind:disabled="view"
+                                v-model="expiration_date"></datepicker>
 
                     <span class="help-block"
                           v-if="has_error && errors.expiration_date">{{ errors.expiration_date[0] }}</span>
@@ -55,12 +57,12 @@
 
                 <div class="form-group row mb-0">
                     <div class="ml-auto">
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary" v-if="!view">
                             {{action}}
                         </button>
-                        <button type="button" class="btn btn-danger">
-                            Cancel
-                        </button>
+                        <router-link :to="{name: 'editAnnouncement', params: {id: this.dataId}}" v-if="view"
+                                     class="btn btn-primary">Edit</router-link>
+                        <router-link :to="{name: 'listAnnouncements'}" class="btn btn-danger">Cancel</router-link>
                     </div>
                 </div>
             </form>
@@ -88,7 +90,7 @@
         components: {
             Datepicker
         },
-        props:['action', 'dataId'],
+        props:['action', 'dataId', 'view'],
         methods: {
             submit() {
                 if (this.dataId) {
@@ -108,7 +110,7 @@
                     this.loading = false;
                     this.success = true;
                     console.log(resp.data);
-                    this.$router.push({name: 'editAnnouncement', params: {id: resp.data.id}});
+                    this.$router.push({name: 'viewAnnouncement', params: {id: resp.data.id}});
                 }).catch(resp => {
                     this.success = false;
                     this.errors = resp.response.data.errors;
@@ -127,7 +129,7 @@
                 }).then(resp => {
                     this.loading = false;
                     this.success = true;
-                    this.$router.push({name: 'editAnnouncement', params: {dataId: resp.data.id}});
+                    this.$router.push({name: 'viewAnnouncement', params: {dataId: resp.data.id}});
                 }).catch(resp => {
                     this.success = false;
                     this.errors = resp.response.data.errors;

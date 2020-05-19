@@ -21,7 +21,7 @@ A simple announcements application. Create, edit, view and delete announcements.
 
 #### Steps
 
-1. Copy the content of .env.examplo to a .env file
+1. Copy the content of .env.example to a .env file
 2. Fill out the database connection properties
 3. Run ```php artisan key:generate``` to create a new app key into the .env file
 4. Run ```php artisan jwt:secret``` to create a new JWT key into the .env file
@@ -39,7 +39,14 @@ A simple announcements application. Create, edit, view and delete announcements.
 
 #### Steps
 
-TODO
+1. Create the environments file based on .env.example: ```cp .env.example .env```
+
+   1. Set ```DB_HOST=db```
+   2. ```DB_DATABASE```, ```DB_USERNAME```, ```DB_PASSWORD``` should be the same as set in ```docker-compose.yml```
+2. Run ```docker-compose up -d```
+3. Run ```docker-compose exec app php artisan key:generate```
+4. Run ```docker-compose exec app php artisan config:cache```
+5. Visit ```http://localhost```
 
 ## License
 

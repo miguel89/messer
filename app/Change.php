@@ -4,6 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Change
+ *
+ * Represents a change made to a Message object.
+ * @package App
+ */
 class Change extends Model
 {
     /**

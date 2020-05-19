@@ -5,6 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * Class Message
+ *
+ * Represents a Message (or Announcement)
+ * @package App
+ */
 class Message extends Model
 {
     // Using soft delete does not actually removes the record from the database.

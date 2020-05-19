@@ -113,6 +113,14 @@ class MessageController extends Controller
         return true;
     }
 
+    /**
+     * Validates the Message object for creation and edition. If messageId is given,
+     * fetch the object from the database and update the values. If not, creates a new object.
+     *
+     * @param Request $request
+     * @param null $messageId
+     * @return Message
+     */
     private function validateAndCreateObject(Request $request, $messageId = null) {
         $validatedData = $request->validate([
             'subject' => ['required', 'max:255'],

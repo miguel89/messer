@@ -18,6 +18,7 @@ require('./bootstrap');
 
 window.Vue = Vue;
 
+// application routes
 const router = new VueRouter({
     history: true,
     mode: 'history',
@@ -90,9 +91,16 @@ Vue.use(VueAuth, auth);
 
 Vue.component('app', AppComponent);
 
+// register date filters
 Vue.filter('formatDate', function(value) {
     if (value) {
         return moment(String(value)).format('MM/DD/YYYY')
+    }
+});
+
+Vue.filter('formatFullDate', function(value) {
+    if (value) {
+        return moment(String(value)).format('MM/DD/YYYY HH:MM')
     }
 });
 

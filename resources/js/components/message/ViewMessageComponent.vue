@@ -11,14 +11,16 @@
                 </div>
             </div>
         </div>
+        <changes-component v-bind:message-id="$route.params.id"></changes-component>
     </div>
 </template>
 
 <script>
     import MessageFormComponent from "./MessageFormComponent";
+    import ChangesComponent from "./ChangesComponent";
     export default {
         name: "CreateMessageComponent",
-        components: {MessageFormComponent}
+        components: {MessageFormComponent, ChangesComponent}
     }
 </script>
 

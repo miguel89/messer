@@ -54,15 +54,15 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
 <script>
     import ConfirmDeleteComponent from "./ConfirmDeleteComponent";
+    import ChangesComponent from "./ChangesComponent";
     export default {
         name: "ListMessages",
-        components: {ConfirmDeleteComponent},
+        components: {ChangesComponent, ConfirmDeleteComponent},
         data() {
             return {
                 items: [],

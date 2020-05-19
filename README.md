@@ -1,11 +1,10 @@
 # Messer
 
-A simple announcements application. Create, edit, view and delete announcements. Created with Laravel, Vue.js and MySQL.
+A simple announcements' application. Create, edit, view and delete announcements. Created with Laravel, Vue.js and MySQL.
 
-### Improvements
+## Improvements
 - Improve unit test coverage.
 - Display notifications and alerts to the user.
-- Improve dashboard page.
 - Better validation in the start and expire dates fields. 
 
 ## How to run
@@ -45,9 +44,11 @@ A simple announcements application. Create, edit, view and delete announcements.
    2. ```DB_DATABASE```, ```DB_USERNAME```, ```DB_PASSWORD``` should be the same as set in ```docker-compose.yml```
 2. Run ```docker-compose up -d```
 3. Run ```docker-compose exec app php artisan key:generate```
-4. Run ```docker-compose exec app php artisan config:cache```
-5. Visit ```http://localhost```
+4. Run ```docker-compose exec app php artisan jwt:secret```
+5. Run ```docker-compose exec app php artisan config:cache```
+6. Run ```docker-compose exec app php artisan migrate```
+7. Visit ```http://localhost```
 
-## License
+## Known bugs
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- Incorrectly registering Messages create and expire date changes on the edition when it does not change. 

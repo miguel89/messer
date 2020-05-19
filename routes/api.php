@@ -29,6 +29,14 @@ Route::group([
 
 });
 
+Route::get('messages/new', 'API\MessageController@listNew');
+Route::get('messages/updated', 'API\MessageController@listUpdated');
+Route::get('messages/expired', 'API\MessageController@listExpired');
+Route::get('messages/next', 'API\MessageController@listNext');
+
 Route::resource('messages', 'API\MessageController')->except([
     'create', 'edit'
 ]);
+
+Route::get('messages/{messageId}/changes', 'API\ChangeController@list');
+

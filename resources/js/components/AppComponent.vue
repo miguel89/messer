@@ -62,7 +62,6 @@
     data() {
         return {
             routes: {
-                // UNLOGGED
                 unlogged: [
                     {
                         name: 'Register',

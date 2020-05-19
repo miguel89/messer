@@ -12,6 +12,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Change extends Model
 {
+    // mass fillable attributes
+    protected $fillable = [
+        'description',
+        'message_id',
+        'user_id'
+    ];
+
     /**
      * Get the user that made the change.
      */

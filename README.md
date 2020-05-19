@@ -5,8 +5,8 @@ A simple announcements application. Create, edit, view and delete announcements.
 ### Improvements
 - Improve unit test coverage.
 - Display notifications and alerts to the user.
-- Improve dashboard page
-
+- Improve dashboard page.
+- Better validation in the start and expire dates fields. 
 
 ## How to run
 

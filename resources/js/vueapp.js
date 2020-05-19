@@ -14,6 +14,8 @@ import CreateMessageComponent from "./components/message/CreateMessageComponent"
 import EditMessage from "./components/message/EditMessage";
 import ViewMessageComponent from "./components/message/ViewMessageComponent";
 
+require('./bootstrap');
+
 window.Vue = Vue;
 
 const router = new VueRouter({

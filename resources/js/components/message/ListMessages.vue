@@ -25,7 +25,10 @@
                                 <td>
                                     <router-link :to="{name: 'viewAnnouncement', params: {id: message.id}}" class="btn btn-sm btn-default">View</router-link>
                                     <router-link :to="{name: 'editAnnouncement', params: {id: message.id}}" class="btn btn-sm btn-default">Edit</router-link>
-                                    <button type="button" class="btn btn-sm btn-danger">Delete</button>
+                                    <button type="button" class="btn btn-sm btn-danger" data-toggle="modal"
+                                            v-bind:data-target="'#deleteModal' + message.id" v-bind:data-id="message.id">Delete</button>
+                                    <confirm-delete-component v-bind:message-id="message.id"
+                                        v-on:deleted="refresh()"></confirm-delete-component>
                                 </td>
                             </tr>
                             </tbody>
@@ -51,12 +54,15 @@
                 </div>
             </div>
         </div>
+
     </div>
 </template>
 
 <script>
+    import ConfirmDeleteComponent from "./ConfirmDeleteComponent";
     export default {
         name: "ListMessages",
+        components: {ConfirmDeleteComponent},
         data() {
             return {
                 items: [],
@@ -70,6 +76,9 @@
             this.list();
         },
         methods: {
+            refresh() {
+                this.list(this.currentPage);
+            },
             list(page = 1) {
                 this.$http.get(`/messages?page=${page}`)
                     .then(resp => {
